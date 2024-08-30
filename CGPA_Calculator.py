@@ -133,13 +133,11 @@ def load_courses(filename: str) -> CourseList:
     :param filename: The path to the CSV file containing the course data.
     :return: A CourseList object containing the courses from the file.
     """
-    course_list = CourseList()
     try:
         with open(filename, 'r') as file:
             csv_reader = csv.DictReader(file)
-            for course_row in csv_reader:
-                course = Course(course_row)
-                course_list.append(course)
+            course_list = CourseList([Course(course_row) for course_row in csv_reader])
+
     except FileNotFoundError:
         print(f"Error: The file {filename} was not found.")
     except Exception as e:
