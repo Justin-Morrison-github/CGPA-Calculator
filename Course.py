@@ -53,10 +53,4 @@ class Course():
         self.in_major = course_dict["Major"].strip().lower() in ['true', '1', 'yes']
 
     def __repr__(self) -> str:
-        return f"""{
-            self.grade: <8} {
-            self.credit: <5.2f} {
-            'Credits': <10} {
-            self.semester: <7} {
-            self.year: <7} {
-            self.name: <30}"""
+        return f"{self.grade:<8} {self.credit:<5.2f} {'Credits':<10} {self.semester:<7} {self.year:<7} {self.name:<30} {'Yes' if self.in_major else 'No'}"
