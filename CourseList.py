@@ -17,7 +17,10 @@ class CourseList:
             self.terms = [course.term for course in self.courses]
             self.grades = [course.grade for course in self.courses]
             self.in_major = [course.in_major for course in self.courses]
-
+            self.total_credits = sum(course.credit for course in self.courses)
+            self.total_grade_points_earned = sum(course.CGPA_points for course in self.courses)
+            self.major_credits = sum(course.credit for course in self.courses if course.in_major)
+            self.major_grade_points_earned = sum(course.CGPA_points for course in self.courses if course.in_major)
         else:
             self.courses = []
 
@@ -69,34 +72,6 @@ class CourseList:
 
         header_string = "".join([f"{title:<{width}}" for title, width in columns])
         return f"{Fore.CYAN}{header_string}{Fore.RESET}"
-
-    @property
-    def total_credits(self):
-        """
-        Calculates the total credits of all courses.
-        """
-        return sum(course.credit for course in self.courses)
-
-    @property
-    def major_credits(self):
-        """
-        Calculates the total credits of all courses.
-        """
-        return sum(course.credit for course in self.courses if course.in_major)
-
-    @property
-    def total_grade_points_earned(self):
-        """
-        Calculates the total credits of all courses.
-        """
-        return sum(course.CGPA_points for course in self.courses)
-
-    @property
-    def major_grade_points_earned(self):
-        """
-        Calculates the total credits of all courses.
-        """
-        return sum(course.CGPA_points for course in self.courses if course.in_major)
 
     def calculate_CGPA(self):
         return self.total_grade_points_earned / self.total_credits
