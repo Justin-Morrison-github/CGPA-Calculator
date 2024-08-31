@@ -1,8 +1,10 @@
 import csv
+from colorama import Fore
 
 from Course import Course, Term
 from CourseList import CourseList
 from Terminal import move_cursor_up, move_cursor_down, clear_line, clear_previous_line_back, clear_previous_lines, print_sleep
+from string_print import str_color
 
 
 def main():
@@ -34,10 +36,10 @@ def main():
         filtered_courses = course_list.filter_by_year_and_term(year, term)
 
     elif filter_preference == "all":
-        print_sleep("All Classes:", 0.5)
+        print_sleep("All Classes:", 0.3)
         filtered_courses = course_list
 
-    print(f"\n{filtered_courses.headers}\n")
+    print(f"\n{filtered_courses.headers}")
     print(f"{filtered_courses}")
 
     calc_cgpa(filtered_courses, check_major=True)
@@ -61,7 +63,7 @@ def get_filtering_preference() -> str:
 
     while choice not in ["1", "2", "3", "4"]:
         if choice in ['q', 'Q']:
-            raise SystemExit("Program terminated by user.")
+            raise SystemExit(str_color("Program terminated by user.", Fore.RED))
         else:
             move_cursor_up()
             clear_line()
@@ -82,12 +84,12 @@ def get_term() -> str:
 
     while term not in Course.valid_terms:
         if term == 'Q':
-            raise SystemExit("Program terminated by user.")
+            raise SystemExit(str_color("Program terminated by user.", Fore.RED))
         else:
             move_cursor_up()
             clear_line()
             move_cursor_up()
-            print(f"Please enter \'{Term.FALL}\' or \'{Term.WINTER} or \'{Term.SUMMER}\'")
+            print(str_color(f"Please enter \'{Term.FALL}\' or \'{Term.WINTER} or \'{Term.SUMMER}\'", Fore.YELLOW))
 
             term = input("Enter Term:  ").title()
 
@@ -109,13 +111,13 @@ def get_year(term: str = None) -> int:
     if term:
         while year not in Course.valid_terms[term]:
             if year in ['q', "Q"]:
-                raise SystemExit("Program terminated by user.")
+                raise SystemExit(str_color("Program terminated by user.", Fore.RED))
             else:
                 move_cursor_up()
                 clear_line()
                 move_cursor_up(2)
 
-                print(f"Please enter any of the following: {Course.valid_terms[term]}")
+                print(str_color(f"Please enter any of the following: {Course.valid_terms[term]}", Fore.YELLOW))
                 move_cursor_down()
 
                 year = input("Enter Year:  ")
@@ -124,7 +126,7 @@ def get_year(term: str = None) -> int:
     else:
         while year not in valid_years:
             if year in ['q', "Q"]:
-                raise SystemExit("Program terminated by user.")
+                raise SystemExit(str_color("Program terminated by user.", Fore.RED))
             else:
                 move_cursor_up()
                 clear_line()
@@ -168,19 +170,21 @@ def calc_cgpa(courses: CourseList, check_major: bool = False) -> None:
     print_delay = 0.4
 
     if courses.total_credits != 0:
-        print(f"Credits Earned: {courses.total_credits}")
+        print(f"{str_color('Credits Earned:', Fore.CYAN)} {str_color(courses.total_credits, Fore.GREEN)}")
 
         cgpa = courses.total_grade_points_earned/courses.total_credits
-        print_sleep(f"CGPA: {cgpa:.2f}\n", print_delay)
+        print_sleep(str_color("CGPA: ", Fore.CYAN) + str_color(f"{cgpa:.2f}\n", Fore.GREEN), print_delay)
     else:
         print("0 Credits Earned. Cannot Calculate CGPA")
 
     if check_major:
         if courses.major_credits != 0:
-            print(f"Major Credits Earned: {courses.major_credits}")
+            print(f"{str_color('Major Credits Earned:', Fore.CYAN)} {str_color(courses.major_credits, Fore.GREEN)}")
 
             major_cgpa = courses.major_grade_points_earned/courses.major_credits
-            print_sleep(f"Major CGPA: {major_cgpa:.2f}\n", print_delay)
+            print_sleep(
+                str_color("Major CGPA: ", Fore.CYAN) + str_color(f"{major_cgpa:.2f}\n", Fore.GREEN),
+                print_delay)
         else:
             print("0 Major Credits Earned. Cannot Calculate Major CGPA")
 
