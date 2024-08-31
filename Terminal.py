@@ -31,6 +31,7 @@ def clear_previous_lines(lines_back: int):
     for _ in range(lines_back):
         sys.stdout.write("\033[F")  # back to previous line
         sys.stdout.write("\033[K")  # clear line
+        sys.stdout.flush()
         time.sleep(0.05)
 
 
