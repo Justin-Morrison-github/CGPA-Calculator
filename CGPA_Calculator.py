@@ -1,4 +1,6 @@
+import os
 import csv
+import time
 from colorama import Fore
 
 from Course import Course, Term
@@ -8,6 +10,11 @@ from string_print import str_color
 
 
 def main():
+    print(os.getcwd())
+    print(os.path.dirname(os.path.realpath(__file__)))
+    time.sleep(5)
+    os.chdir(os.path.dirname(os.path.realpath(__file__)))
+
     filename = "courses.csv"
     course_list = load_courses(filename)
 
