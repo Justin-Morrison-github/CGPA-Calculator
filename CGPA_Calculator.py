@@ -34,6 +34,7 @@ def main():
         filtered_courses = course_list.filter_by_year_and_semester(year, semester)
 
     elif filter_preference == "all":
+        print_sleep("All Classes:", 0.5)
         filtered_courses = course_list
 
     print(f"\n{filtered_courses.headers}\n")
