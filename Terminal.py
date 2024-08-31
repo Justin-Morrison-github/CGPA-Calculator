@@ -1,4 +1,5 @@
 import sys
+import time
 
 
 def move_cursor_down(lines_down: int = 1):
@@ -16,7 +17,7 @@ def clear_line(lines_cleared: int = 1):
         sys.stdout.write("\033[K")  # clear line
 
 
-def clear_previous_line(lines_back: int):
+def clear_previous_line_back(lines_back: int):
     for _ in range(lines_back):
         sys.stdout.write("\033[F")  # back to previous line
 
@@ -24,3 +25,15 @@ def clear_previous_line(lines_back: int):
 
     for _ in range(lines_back):
         sys.stdout.write("\033[E")  # down to next line
+
+
+def clear_previous_lines(lines_back: int):
+    for _ in range(lines_back):
+        sys.stdout.write("\033[F")  # back to previous line
+        sys.stdout.write("\033[K")  # clear line
+        time.sleep(0.05)
+
+
+def print_sleep(value, delay):
+    print(value)
+    time.sleep(delay)
