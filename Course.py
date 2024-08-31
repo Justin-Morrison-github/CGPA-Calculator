@@ -54,10 +54,9 @@ class Course():
 
     def __repr__(self) -> str:
         return f"""{
-            self.grade: <8} {
-            self.credit: <5.2f} {
-            'Credits': <10} {
-            self.term: <7} {
-            self.year: <7} {
-            self.name: <30} {
+            self.grade: <8}{
+            self.credit: <10.2f}{
+            self.term: <8}{
+            self.year: <8}{
+            self.name: <30}{
             'Yes' if self.in_major else 'No'}"""
