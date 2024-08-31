@@ -1,4 +1,4 @@
-class Semester():
+class Term():
     FALL = "Fall"
     WINTER = "Winter"
     SUMMER = "Summer"
@@ -22,10 +22,10 @@ class Course():
         "SAT": 0.0
     }
 
-    valid_semesters = {
-        Semester.FALL: ["2023"],
-        Semester.WINTER: ["2024"],
-        Semester.SUMMER: []
+    valid_terms = {
+        Term.FALL: ["2023"],
+        Term.WINTER: ["2024"],
+        Term.SUMMER: []
     }
 
     def __init__(self, course_dict: dict):
@@ -40,10 +40,10 @@ class Course():
         self.credit = float(course_dict['Credit'])
         self.CGPA_points = float(course_dict['CGPA Points'])
 
-        if course_dict['Semester'] in Course.valid_semesters:
-            self.semester = course_dict['Semester']
+        if course_dict['Term'] in Course.valid_terms:
+            self.term = course_dict['Term']
         else:
-            raise ValueError(f"Invalid semester: {course_dict['Semester']}")
+            raise ValueError(f"Invalid term: {course_dict['Term']}")
 
         if course_dict["Final Grade"] in Course.grades:
             self.grade = course_dict['Final Grade']
@@ -53,4 +53,11 @@ class Course():
         self.in_major = course_dict["Major"].strip().lower() in ['true', '1', 'yes']
 
     def __repr__(self) -> str:
-        return f"{self.grade:<8} {self.credit:<5.2f} {'Credits':<10} {self.semester:<7} {self.year:<7} {self.name:<30} {'Yes' if self.in_major else 'No'}"
+        return f"""{
+            self.grade: <8} {
+            self.credit: <5.2f} {
+            'Credits': <10} {
+            self.term: <7} {
+            self.year: <7} {
+            self.name: <30} {
+            'Yes' if self.in_major else 'No'}"""

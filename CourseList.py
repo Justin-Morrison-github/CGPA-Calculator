@@ -13,7 +13,7 @@ class CourseList:
             self.course_numbers = [course.course_number for course in self.courses]
             self.credits = [course.credit for course in self.courses]
             self.CGPA_points = [course.CGPA_points for course in self.courses]
-            self.semesters = [course.semester for course in self.courses]
+            self.terms = [course.term for course in self.courses]
             self.grades = [course.grade for course in self.courses]
             self.in_major = [course.in_major for course in self.courses]
 
@@ -39,21 +39,21 @@ class CourseList:
         """
         return CourseList([course for course in self.courses if course.year == year])
 
-    def filter_by_semester(self, semester):
+    def filter_by_term(self, term):
         """
-        Filters courses by the specified semester.
+        Filters courses by the specified term.
         """
-        return CourseList([course for course in self.courses if course.semester == semester])
+        return CourseList([course for course in self.courses if course.term == term])
 
-    def filter_by_year_and_semester(self, year: int, semester):
+    def filter_by_year_and_term(self, year: int, term):
         """
-        Filters courses by the specified year and semester.
+        Filters courses by the specified year and term.
 
         :param year: Integer of wanted year
-        :param semester: String of wanted semester ('fall' or 'winter')
-        :return: CourseList object containing courses that took place in that year and semester
+        :param term: String of wanted term ('fall' or 'winter')
+        :return: CourseList object containing courses that took place in that year and term
         """
-        return CourseList([course for course in self.courses if course.year == year and course.semester == semester])
+        return CourseList([course for course in self.courses if course.year == year and course.term == term])
 
     @property
     def headers(self):

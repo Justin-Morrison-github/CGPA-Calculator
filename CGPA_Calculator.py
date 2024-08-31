@@ -1,6 +1,6 @@
 import csv
 
-from Course import Course, Semester
+from Course import Course, Term
 from CourseList import CourseList
 from Terminal import move_cursor_up, move_cursor_down, clear_line, clear_previous_line_back, clear_previous_lines, print_sleep
 
@@ -18,20 +18,20 @@ def main():
         print(f"{year} Classes:")
         filtered_courses = course_list.filter_by_year(year)
 
-    elif filter_preference == "semester":
-        semester = get_semester()
+    elif filter_preference == "term":
+        term = get_term()
         clear_previous_lines(1)
 
-        print(f"{semester.title()} Classes:")
-        filtered_courses = course_list.filter_by_semester(semester)
+        print(f"{term.title()} Classes:")
+        filtered_courses = course_list.filter_by_term(term)
 
     elif filter_preference == "both":
-        semester = get_semester()
-        year = get_year(semester)
+        term = get_term()
+        year = get_year(term)
         clear_previous_lines(2)
 
-        print(f"{semester.title()} {year} Classes:")
-        filtered_courses = course_list.filter_by_year_and_semester(year, semester)
+        print(f"{term.title()} {year} Classes:")
+        filtered_courses = course_list.filter_by_year_and_term(year, term)
 
     elif filter_preference == "all":
         print_sleep("All Classes:", 0.5)
@@ -47,15 +47,15 @@ def get_filtering_preference() -> str:
 
     options = {
         "1": "year",
-        "2": "semester",
+        "2": "term",
         "3": "both",
         "4": "all"
     }
 
     print("\nHow would you like to filter your courses?")
     print("1. View all courses from a single year")
-    print("2. View all semesters of a certain type across different years")
-    print("3. View courses from a single semester in a single year")
+    print("2. View all terms of a certain type across different years")
+    print("3. View courses from a single term in a single year")
     print("4. View all classes")
     choice = input("\nEnter 1, 2, 3, or 4: ").strip()
 
@@ -72,42 +72,42 @@ def get_filtering_preference() -> str:
     return options[choice]
 
 
-def get_semester() -> str:
+def get_term() -> str:
     """
-    Prompts user to enter semester. Only accepts 'fall' or 'winter'
+    Prompts user to enter term. Only accepts 'fall' or 'winter'
 
-    :return: The semester returned as a string
+    :return: The term returned as a string
     """
-    semester = input("Enter Semester:  ").title()
+    term = input("Enter Term:  ").title()
 
-    while semester not in Course.valid_semesters:
-        if semester == 'Q':
+    while term not in Course.valid_terms:
+        if term == 'Q':
             raise SystemExit("Program terminated by user.")
         else:
             move_cursor_up()
             clear_line()
             move_cursor_up()
-            print(f"Please enter \'{Semester.FALL}\' or \'{Semester.WINTER} or \'{Semester.SUMMER}\'")
+            print(f"Please enter \'{Term.FALL}\' or \'{Term.WINTER} or \'{Term.SUMMER}\'")
 
-            semester = input("Enter Semester:  ").title()
+            term = input("Enter Term:  ").title()
 
     clear_previous_line_back(2)
-    return semester
+    return term
 
 
-def get_year(semester: str = None) -> int:
+def get_year(term: str = None) -> int:
     """
-    Prompts user to enter a valid year for the given semester
+    Prompts user to enter a valid year for the given term
 
-    :param semester: The name of the semester ('fall' or 'winter')
+    :param term: The name of the term ('fall' or 'winter')
     :return: The valid year entered as an integer
     """
-    year = input("Enter Year:      ")
+    year = input("Enter Year:  ")
 
     valid_years = ["2023", "2024", "2025", "2026", "2027", "2028"]
 
-    if semester:
-        while year not in Course.valid_semesters[semester]:
+    if term:
+        while year not in Course.valid_terms[term]:
             if year in ['q', "Q"]:
                 raise SystemExit("Program terminated by user.")
             else:
@@ -115,10 +115,10 @@ def get_year(semester: str = None) -> int:
                 clear_line()
                 move_cursor_up(2)
 
-                print(f"Please enter any of the following: {Course.valid_semesters[semester]}")
+                print(f"Please enter any of the following: {Course.valid_terms[term]}")
                 move_cursor_down()
 
-                year = input("Enter Year:      ")
+                year = input("Enter Year:  ")
 
         clear_previous_line_back(3)
     else:
