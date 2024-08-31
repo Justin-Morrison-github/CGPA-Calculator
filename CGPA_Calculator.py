@@ -165,10 +165,10 @@ def calc_cgpa(courses: CourseList, check_major: bool = False) -> None:
     :param courses: CourseList object containing courses to have calculated
     :param check_major: Boolean whether to include major specific CGPA or not
     """
-    print_delay = 0.3
+    print_delay = 0.4
 
     if courses.total_credits != 0:
-        print_sleep(f"Credits Earned: {courses.total_credits}", print_delay)
+        print(f"Credits Earned: {courses.total_credits}")
 
         cgpa = courses.total_grade_points_earned/courses.total_credits
         print_sleep(f"CGPA: {cgpa:.2f}\n", print_delay)
@@ -177,7 +177,7 @@ def calc_cgpa(courses: CourseList, check_major: bool = False) -> None:
 
     if check_major:
         if courses.major_credits != 0:
-            print_sleep(f"Major Credits Earned: {courses.major_credits}", print_delay)
+            print(f"Major Credits Earned: {courses.major_credits}")
 
             major_cgpa = courses.major_grade_points_earned/courses.major_credits
             print_sleep(f"Major CGPA: {major_cgpa:.2f}\n", print_delay)
