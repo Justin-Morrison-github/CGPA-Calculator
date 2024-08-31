@@ -1,3 +1,6 @@
+import time
+
+
 class CourseList:
     def __init__(self, list: list = None):
         if list:
@@ -24,12 +27,19 @@ class CourseList:
         return iter(self.courses)
 
     def __repr__(self) -> str:
-        return "\n".join(
-            f"{course.grade:<8} {course.credit:<5.2f} {'Credits':<10} "
-            f"{course.semester:<7} {course.year:<7} {course.name:<30} "
-            f"{'Yes' if course.in_major else 'No'}"
-            for course in self.courses
-        )
+        # time.sleep(0.05)
+        # return "\n".join(
+        #     f"{course.grade:<8} {course.credit:<5.2f} {'Credits':<10} "
+        #     f"{course.semester:<7} {course.year:<7} {course.name:<30} "
+        #     f"{'Yes' if course.in_major else 'No'}"
+        #     for course in self.courses
+        # )
+
+        for course in self.courses:
+            print(course)
+            time.sleep(0.05)
+
+        return "\r"
 
     def filter_by_year(self, year: int):
         """
