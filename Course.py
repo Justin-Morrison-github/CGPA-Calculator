@@ -23,8 +23,8 @@ class Course():
     }
 
     valid_terms = {
-        Term.FALL: ["2023"],
-        Term.WINTER: ["2024"],
+        Term.FALL: [2023],
+        Term.WINTER: [2024],
         Term.SUMMER: []
     }
 
