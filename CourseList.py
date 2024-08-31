@@ -1,4 +1,5 @@
 import time
+from colorama import Fore
 
 
 class CourseList:
@@ -58,16 +59,16 @@ class CourseList:
     @property
     def headers(self):
         columns = [
-            ("Grade", 9),
-            ("Credits", 17),
+            ("Grade", 8),
+            ("Credits", 10),
             ("Term", 8),
             ("Year", 8),
-            ("Class", 31),
-            ("In Major", 11)
+            ("Class", 30),
+            ("In Major", 10)
         ]
 
         header_string = "".join([f"{title:<{width}}" for title, width in columns])
-        return header_string
+        return f"{Fore.CYAN}{header_string}{Fore.RESET}"
 
     @property
     def total_credits(self):
