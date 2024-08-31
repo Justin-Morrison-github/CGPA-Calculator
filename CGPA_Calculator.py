@@ -48,6 +48,26 @@ def main():
     calc_cgpa(filtered_courses, check_major=True)
 
 
+def load_courses(filename: str) -> CourseList:
+    """
+    Loads courses from a CSV file and returns a CourseList object.
+
+    :param filename: The path to the CSV file containing the course data.
+    :return: A CourseList object containing the courses from the file.
+    """
+    try:
+        with open(filename, 'r') as file:
+            csv_reader = csv.DictReader(file)
+            course_list = CourseList([Course(course_row) for course_row in csv_reader])
+
+    except FileNotFoundError:
+        print(f"Error: The file {filename} was not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    return course_list
+
+
 def get_filtering_preference() -> str:
 
     options = {
@@ -79,88 +99,74 @@ def get_filtering_preference() -> str:
 
 def get_term() -> str:
     """
-    Prompts user to enter term. Only accepts 'fall' or 'winter'
+    Prompts user to enter a term. Only accepts 'Fall', 'Winter', or 'Summer'.
 
-    :return: The term returned as a string
+    :return: The valid term entered as a string.
     """
-    term = input("Enter Term:  ").title()
+    valid_terms = [Term.FALL, Term.WINTER, Term.SUMMER]
 
-    while term not in Course.valid_terms:
-        if term == 'Q':
+    while True:
+        term = input("Enter Term (or 'q' to quit):  ").title()
+
+        if term.lower() == 'q':
             raise SystemExit(str_color("Program terminated by user.", Fore.RED))
+
+        if term in valid_terms:
+            clear_previous_line_back(2)
+            return term
         else:
             move_cursor_up()
             clear_line()
             move_cursor_up()
-            print(str_color(f"Please enter \'{Term.FALL}\' or \'{Term.WINTER} or \'{Term.SUMMER}\'", Fore.YELLOW))
-
-            term = input("Enter Term:  ").title()
-
-    clear_previous_line_back(2)
-    return term
+            print(str_color(f"Please enter any of the following valid terms: {valid_terms}", Fore.YELLOW))
 
 
 def get_year(term: str = None) -> int:
     """
-    Prompts user to enter a valid year for the given term
+    Prompts user to enter a valid year for the given term.
 
     :param term: The name of the term ('fall' or 'winter')
     :return: The valid year entered as an integer
     """
-    year = input("Enter Year:  ")
-
-    valid_years = ["2023", "2024", "2025", "2026", "2027", "2028"]
+    valid_years = list(range(2023, 2029))
 
     if term:
-        while year not in Course.valid_terms[term]:
-            if year in ['q', "Q"]:
-                raise SystemExit(str_color("Program terminated by user.", Fore.RED))
-            else:
-                move_cursor_up()
-                clear_line()
-                move_cursor_up(2)
+        valid_years = Course.valid_terms[term]
 
-                print(str_color(f"Please enter any of the following: {Course.valid_terms[term]}", Fore.YELLOW))
+    while True:
+        try:
+            year_input = input("Enter Year (or 'q' to quit):  ")
+
+            if year_input.lower() == "q":
+                raise SystemExit(str_color("Program terminated by user.", Fore.RED))
+
+            year = int(year_input)
+
+            if year in valid_years:
+                if term:
+                    clear_previous_line_back(3)
+                else:
+                    clear_previous_line_back(2)
+
+                return year
+            else:
+                raise ValueError
+
+        except ValueError:
+            move_cursor_up()
+            clear_line()
+            move_cursor_up()
+
+            if term:
+                move_cursor_up()
+
+                print(
+                    str_color(
+                        f"Please enter any of the following valid years for {term}: {valid_years}", Fore.YELLOW))
                 move_cursor_down()
 
-                year = input("Enter Year:  ")
-
-        clear_previous_line_back(3)
-    else:
-        while year not in valid_years:
-            if year in ['q', "Q"]:
-                raise SystemExit(str_color("Program terminated by user.", Fore.RED))
             else:
-                move_cursor_up()
-                clear_line()
-                move_cursor_up()
-
-                print(f'Please enter any of the following: {valid_years}')
-                year = input("Enter Year:      ")
-
-        clear_previous_line_back(2)
-
-    return int(year)
-
-
-def load_courses(filename: str) -> CourseList:
-    """
-    Loads courses from a CSV file and returns a CourseList object.
-
-    :param filename: The path to the CSV file containing the course data.
-    :return: A CourseList object containing the courses from the file.
-    """
-    try:
-        with open(filename, 'r') as file:
-            csv_reader = csv.DictReader(file)
-            course_list = CourseList([Course(course_row) for course_row in csv_reader])
-
-    except FileNotFoundError:
-        print(f"Error: The file {filename} was not found.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-    return course_list
+                print(str_color(f"Please enter any of the following valid years: {valid_years}"), Fore.YELLOW)
 
 
 def calc_cgpa(courses: CourseList, check_major: bool = False) -> None:
