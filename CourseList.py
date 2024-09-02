@@ -1,4 +1,5 @@
 import time
+from colorama import Fore
 
 
 class CourseList:
@@ -16,7 +17,10 @@ class CourseList:
             self.terms = [course.term for course in self.courses]
             self.grades = [course.grade for course in self.courses]
             self.in_major = [course.in_major for course in self.courses]
-
+            self.total_credits = sum(course.credit for course in self.courses)
+            self.total_grade_points_earned = sum(course.CGPA_points for course in self.courses)
+            self.major_credits = sum(course.credit for course in self.courses if course.in_major)
+            self.major_grade_points_earned = sum(course.CGPA_points for course in self.courses if course.in_major)
         else:
             self.courses = []
 
@@ -58,44 +62,16 @@ class CourseList:
     @property
     def headers(self):
         columns = [
-            ("Grade", 9),
-            ("Credits", 17),
+            ("Grade", 8),
+            ("Credits", 10),
             ("Term", 8),
             ("Year", 8),
-            ("Class", 31),
-            ("In Major", 11)
+            ("Class", 30),
+            ("In Major", 10)
         ]
 
         header_string = "".join([f"{title:<{width}}" for title, width in columns])
-        return header_string
-
-    @property
-    def total_credits(self):
-        """
-        Calculates the total credits of all courses.
-        """
-        return sum(course.credit for course in self.courses)
-
-    @property
-    def major_credits(self):
-        """
-        Calculates the total credits of all courses.
-        """
-        return sum(course.credit for course in self.courses if course.in_major)
-
-    @property
-    def total_grade_points_earned(self):
-        """
-        Calculates the total credits of all courses.
-        """
-        return sum(course.CGPA_points for course in self.courses)
-
-    @property
-    def major_grade_points_earned(self):
-        """
-        Calculates the total credits of all courses.
-        """
-        return sum(course.CGPA_points for course in self.courses if course.in_major)
+        return f"{Fore.CYAN}{header_string}{Fore.RESET}"
 
     def calculate_CGPA(self):
         return self.total_grade_points_earned / self.total_credits
