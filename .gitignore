@@ -3,3 +3,4 @@ __pycache__
 .Bat
 courses.csv
 venv
+.vscode
