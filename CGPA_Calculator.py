@@ -166,7 +166,7 @@ def get_year(term: str = None) -> int:
                 move_cursor_down()
 
             else:
-                print(str_color(f"Please enter any of the following valid years: {valid_years}"), Fore.YELLOW)
+                print(str_color(f"Please enter any of the following valid years: {valid_years}", Fore.YELLOW))
 
 
 def calc_cgpa(courses: CourseList, check_major: bool = False) -> None:
