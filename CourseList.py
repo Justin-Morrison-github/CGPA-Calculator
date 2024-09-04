@@ -3,9 +3,9 @@ from colorama import Fore
 
 
 class CourseList:
-    def __init__(self, list: list = None):
-        if list:
-            self.courses = list
+    def __init__(self, course_list: list = None):
+        if course_list:
+            self.courses = course_list
             self.names = [course.name for course in self.courses]
             self.subjects = [course.subject for course in self.courses]
             self.sections = [course.section for course in self.courses]
