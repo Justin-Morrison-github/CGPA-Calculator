@@ -3,6 +3,7 @@ from colorama import Fore
 
 
 class CourseList:
+
     def __init__(self, course_list: list = None):
         if course_list:
             self.courses = course_list
@@ -23,9 +24,30 @@ class CourseList:
             self.major_grade_points_earned = sum(course.CGPA_points for course in self.courses if course.in_major)
         else:
             self.courses = []
+            self.names = None
+            self.subjects = None
+            self.sections = None
+            self.years = None
+            self.CRNs = None
+            self.course_numbers = None
+            self.credits = None
+            self.CGPA_points = None
+            self.terms = None
+            self.grades = None
+            self.in_major = None
+            self.total_credits = None
+            self.total_grade_points_earned = None
+            self.major_credits = None
+            self.major_grade_points_earned = None
 
     def append(self, course):
         self.courses.append(course)
+
+    def len(self):
+        return len(self.courses)
+
+    def __len__(self):
+        return len(self.courses)
 
     def __iter__(self):
         return iter(self.courses)
