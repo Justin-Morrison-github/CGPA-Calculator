@@ -52,7 +52,9 @@ class Course():
     }
 
     def __init__(self, course_dict: dict = None):
-        if course_dict is None:
+        # TODO use .get when retreiving values so I can add a default fail value
+
+        if not course_dict:
             self.name = None
             self.subject = None
             self.section = None
@@ -65,13 +67,13 @@ class Course():
             self.grade = None
             self.in_major = None
         else:
-            self.name = course_dict['Course Title']
+            self.name = course_dict['Name']
             self.subject = course_dict['Subject']
             self.section = course_dict['Section']
 
             self.year = int(course_dict['Year'])
             self.CRN = int(course_dict['CRN'])
-            self.course_number = int(course_dict['Course Number'])
+            self.course_number = int(course_dict['Number'])
 
             self.credit = float(course_dict['Credit'])
             self.CGPA_points = float(course_dict['CGPA Points'])
@@ -81,12 +83,14 @@ class Course():
             else:
                 raise ValueError(f"Invalid term: {course_dict['Term']}")
 
-            if course_dict["Final Grade"] in Course.grades:
-                self.grade = course_dict['Final Grade']
+            if course_dict["Grade"] in Course.grades:
+                self.grade = course_dict['Grade']
             else:
-                raise ValueError(f"Invalid grade: {course_dict['Final Grade']}")
+                raise ValueError(f"Invalid grade: {course_dict['Grade']}")
 
             self.in_major = course_dict["Major"].strip().lower() in ['true', '1', 'yes']
+
+        self.attrs = list(self.__dict__.keys())
 
     def __repr__(self) -> str:
         return f"""{
