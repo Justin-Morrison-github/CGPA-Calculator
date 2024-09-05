@@ -7,23 +7,26 @@ from parameterized import parameterized
 class TestCourse(unittest.TestCase):
     def setUp(self):
         self.course_dict = {
-            "Year": 2023, "Term": "Fall", "CRN": 30960, "Subject": "CHEM", "Course Number": 1101, "Section": "B",
-            "Course Title": "Chemistry", "Final Grade": "A+", "Credit": 0.500, "CGPA Points": 6.00, "Major": "True"}
+            "Year": 2023, "Term": "Fall", "CRN": 30960, "Subject": "CHEM", "Number": 1101, "Section": "B",
+            "Name": "Chemistry", "Grade": "A+", "Credit": 0.500, "CGPA Points": 6.00, "Major": "True"}
         self.course = Course(self.course_dict)
 
-    def test_init_empty_course(self):
+    @parameterized.expand([
+        ("year", None),
+        ("term", None),
+        ("CRN", None),
+        ("subject", None),
+        ("course_number", None),
+        ("section", None),
+        ("name", None),
+        ("grade", None),
+        ("credit", None),
+        ("CGPA_points", None),
+        ("in_major", None),
+    ])
+    def test_init_empty_course(self, attr_name, value):
         course = Course()
-        self.assertEqual(course.year, None)
-        self.assertEqual(course.term, None)
-        self.assertEqual(course.CRN, None)
-        self.assertEqual(course.subject, None)
-        self.assertEqual(course.course_number, None)
-        self.assertEqual(course.section, None)
-        self.assertEqual(course.name, None)
-        self.assertEqual(course.grade, None)
-        self.assertEqual(course.credit, None)
-        self.assertEqual(course.CGPA_points, None)
-        self.assertEqual(course.in_major, None)
+        self.assertEqual(course.__getattribute__(attr_name), value)
 
     def test_init_course_year(self):
         self.assertIsInstance(self.course.year, int)
@@ -59,7 +62,7 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(self.course.course_number, int)
         self.assertEqual(self.course.course_number, 1101)
         self.assertEqual(len(str(self.course.course_number)), 4)
-        self.course_dict["Course Number"] = "Text"
+        self.course_dict["Number"] = "Text"
         with self.assertRaises(ValueError):
             Course(self.course_dict)
 
@@ -97,7 +100,6 @@ class TestCourse(unittest.TestCase):
 
 # ---------------------------------------------------
 
-
     @parameterized.expand([
         ("A+", 12.0),
         ("A", 11.0),
@@ -123,31 +125,36 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(Term.WINTER, "Winter")
         self.assertEqual(Term.SUMMER, "Summer")
 
-    def test_init_course_valid_terms(self):
-        self.assertEqual(self.course.valid_terms["Fall"], [2023])
-        self.assertEqual(self.course.valid_terms["Winter"], [2024])
-        self.assertEqual(self.course.valid_terms["Summer"], [])
+    @parameterized.expand([
+        ("Fall", [2023]),
+        ("Winter", [2024]),
+        ("Summer", []),
+        (Term.FALL, [2023]),
+        (Term.WINTER, [2024]),
+        (Term.SUMMER, []),
+    ])
+    def test_init_course_valid_terms(self, term, years):
+        self.assertEqual(self.course.valid_terms[term], years)
 
-        self.assertEqual(self.course.valid_terms[Term.FALL], [2023])
-        self.assertEqual(self.course.valid_terms[Term.WINTER], [2024])
-        self.assertEqual(self.course.valid_terms[Term.SUMMER], [])
-
-    def test_init_course_grade_colors(self):
-        self.assertEqual(self.course.grade_colors["A+"], f"{Fore.GREEN}A+{Fore.RESET}")
-        self.assertEqual(self.course.grade_colors["A"], f"{Fore.GREEN}A{Fore.RESET}")
-        self.assertEqual(self.course.grade_colors["A-"], f"{Fore.GREEN}A-{Fore.RESET}")
-        self.assertEqual(self.course.grade_colors["B+"], f"{Fore.BLUE}B+{Fore.RESET}")
-        self.assertEqual(self.course.grade_colors["B"], f"{Fore.BLUE}B{Fore.RESET}")
-        self.assertEqual(self.course.grade_colors["B-"], f"{Fore.BLUE}B-{Fore.RESET}")
-        self.assertEqual(self.course.grade_colors["C+"], f"{Fore.YELLOW}C+{Fore.RESET}")
-        self.assertEqual(self.course.grade_colors["C"], f"{Fore.YELLOW}C{Fore.RESET}")
-        self.assertEqual(self.course.grade_colors["C-"], f"{Fore.YELLOW}C-{Fore.RESET}")
-        self.assertEqual(self.course.grade_colors["D+"], f"{Fore.RED}D+{Fore.RESET}")
-        self.assertEqual(self.course.grade_colors["D"], f"{Fore.RED}D{Fore.RESET}")
-        self.assertEqual(self.course.grade_colors["D-"], f"{Fore.RED}D-{Fore.RESET}")
-        self.assertEqual(self.course.grade_colors["F"], f"{Fore.RED}F{Fore.RESET}")
-        self.assertEqual(self.course.grade_colors["SAT"], f"{Fore.GREEN}SAT{Fore.RESET}")
-        self.assertEqual(self.course.grade_colors["UNS"], f"{Fore.RED}UNS{Fore.RESET}")
+    @parameterized.expand([
+        ("A+", f"{Fore.GREEN}A+{Fore.RESET}"),
+        ("A", f"{Fore.GREEN}A{Fore.RESET}"),
+        ("A-", f"{Fore.GREEN}A-{Fore.RESET}"),
+        ("B+", f"{Fore.BLUE}B+{Fore.RESET}"),
+        ("B", f"{Fore.BLUE}B{Fore.RESET}"),
+        ("B-", f"{Fore.BLUE}B-{Fore.RESET}"),
+        ("C+", f"{Fore.YELLOW}C+{Fore.RESET}"),
+        ("C", f"{Fore.YELLOW}C{Fore.RESET}"),
+        ("C-", f"{Fore.YELLOW}C-{Fore.RESET}"),
+        ("D+", f"{Fore.RED}D+{Fore.RESET}"),
+        ("D", f"{Fore.RED}D{Fore.RESET}"),
+        ("D-", f"{Fore.RED}D-{Fore.RESET}"),
+        ("F", f"{Fore.RED}F{Fore.RESET}"),
+        ("SAT", f"{Fore.GREEN}SAT{Fore.RESET}"),
+        ("UNS", f"{Fore.RED}UNS{Fore.RESET}"),
+    ])
+    def test_init_course_grade_colors(self, grade, color):
+        self.assertEqual(self.course.grade_colors[grade], color)
 
     def test_repr(self):
         self.assertEqual(repr(self.course),
